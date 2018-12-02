@@ -1,4 +1,7 @@
 package net.jevindement.collegeletgo;
+/**
+ * Description: MainActivity is in charge of the menu navigation bar
+ */
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,9 +26,15 @@ public class MainActivity extends AppCompatActivity implements
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
-
+        //default screen is the home screen
         loadFragment(new HomeFragment());
     }
+
+    /**
+     * replaces current screen with the new screen while still keeping the nav menu
+     * @param fragment- certain item clicked
+     * @return returns false after checking if fragment isnt null
+     */
     private boolean loadFragment(Fragment fragment)
     {
         if(fragment != null)
@@ -36,6 +45,13 @@ public class MainActivity extends AppCompatActivity implements
         }
         return false;
     }
+
+    /**
+     * Description: Checks to see which menu item is being clicked
+     * and then loads that layout
+     * @param menuItem (menu navigation bar)
+     * @return loadFragment(specific screen)
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
     {

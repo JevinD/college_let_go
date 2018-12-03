@@ -23,6 +23,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.textservice.SpellCheckerInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -51,6 +52,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+    private static final char[] SPECIAL_CHARS = {'!','@','#','$','%','^','&','*','(',')','<',
+    '>','{','}','[',']','?'};
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -190,14 +194,45 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         }
     }
 
+    /**
+     * Splits the email on every ".". if the last item in the array is "edu"(signifying that
+     * the email is a university email, then true is returned.
+     * @param email email string from the email textView
+     * @return boolean representation of checking for "edu"
+     */
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        String[] emailCheck =  email.split(".");
+        int length = emailCheck.length;
+        return emailCheck[length - 1].equals("edu");
     }
 
+    /**
+     *Checks to see if the password contains a number or special character
+     * @param password input string
+     * @return boolean representation if string contains number or special character
+     */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        boolean flag;
+        boolean Nflag = false;
+        boolean Sflag = false;
+        char current;
+        int index = 0;
+       while(index != password.length()){
+           current = password.charAt(index);
+           for( char item : SPECIAL_CHARS){
+               Sflag = current == item;
+           }
+           Nflag = '0' <= current && current <= '9';
+           if(Sflag && Nflag){
+               index = SPECIAL_CHARS.length;
+           }
+           else{
+               index++;
+           }
+
+       }
+       flag = Sflag && Nflag;
+        return flag;
     }
 
     /**
